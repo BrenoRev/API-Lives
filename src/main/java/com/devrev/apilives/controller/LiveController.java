@@ -3,8 +3,6 @@ package com.devrev.apilives.controller;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
-import javax.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -19,6 +17,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -27,6 +26,7 @@ import com.devrev.apilives.service.LiveService;
 
 @CrossOrigin(origins = "*")
 @RestController
+@RequestMapping("/api/v1")
 public class LiveController {
 
     @Autowired
@@ -54,7 +54,7 @@ public class LiveController {
     }
 
     @PostMapping("/lives")
-    public ResponseEntity<Live> saveLive(@RequestBody @Valid Live live) {
+    public ResponseEntity<Live> saveLive(@RequestBody Live live) {
         live.setRegistrationDate(LocalDateTime.now());
         return new ResponseEntity<Live>(liveService.save(live), HttpStatus.CREATED);
     }
@@ -72,7 +72,7 @@ public class LiveController {
 
     @PutMapping("/lives/{id}")
     public ResponseEntity<Live> updateLive(@PathVariable(value="id") Long id,
-                                                      @RequestBody @Valid Live Live) {
+                                                      @RequestBody Live Live) {
         Optional<Live> liveO = liveService.findById(id);
         if(!liveO.isPresent()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
